@@ -2,6 +2,8 @@ var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 
+var port = process.env.PORT || 8080;
+
 var schema = buildSchema(`
   type Query {
     hello: String
@@ -9,7 +11,7 @@ var schema = buildSchema(`
 `);
 
 var root = {
-  hello: (name) => {
+  hello: () => {
     return 'Hello !';
   },
 };
@@ -21,5 +23,5 @@ app.use('/graphql', graphqlHTTP({
     graphiql:true,
 }));
 
-app.listen(4000);
-console.log('Running a GraphQL API server at localhost:4000/graphql');
+app.listen(port);
+console.log('Running a GraphQL API server at ' + port);
