@@ -35,13 +35,15 @@ class User {
     this.name = name;
     this.email = email;
   }
+}
 
+var root = {
   createUser({input}) {
     var id = require('crypto').randomBytes(10).toString('hex');
     fakeDatabase[id] = input;
 
     return new User(id, input);
-  }
+  },
 
   updateUser({id, input}) {
     if (!fakeDataBase[id]) {
@@ -49,20 +51,14 @@ class User {
     }
     fakeDatabase[id] = input;
     return new User(id, input);
-  }
+  },
 
   getUser({id}) {
     if (!fakeDataBase[id]) {
       throw new Error('No user exists with id ' + id);
     }
     return new User(id, fakeDataBase[id]);
-  }
-}
-
-var root = {
-  getDice: function({numSides}) {
-    return new Dice(numSides || 6);
-  }
+  },
 };
 
 var app = express();
