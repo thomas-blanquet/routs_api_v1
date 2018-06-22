@@ -19,13 +19,13 @@ var root = {
     },
     quote: () => {
 	return Math.random() > 0.5 ? "It is what it is" : "Shit happens";
-    }
+    },
     random: () => {
 	return Math.random();
-    }
+    },
     rollThreeDices: () => {
 	return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
-    }
+    },
 };
 
 var app = express();
