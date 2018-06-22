@@ -1,42 +1,52 @@
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
-var { buildSchema } = require('graphql');
+var {
+  buildSchema
+} = require('graphql');
 
 var port = process.env.PORT || 8080;
 
 var schema = buildSchema(`
+  type Dice {
+    numSides: Int!
+    rollOnce: Int!
+    roll(numRolls: Int!) : [Int]
+  }
+
   type Query {
-    hello: String
-    quote: String
-    random: Float!
-    rollDices(numDices: Int!, numSides: Int): [Int]
+    getDice(numSides: Int): Dice
   }
 `);
 
+class Dice {
+  constructor(numSides) {
+    this.numSides = numSides;
+  }
+
+  rollOnce() {
+    return 1 + Math.floor(Math.random() * this.numSides);
+  }
+
+  roll({numRolls}) {
+    var output = [];
+    for (var i = 0; i < numRolls; i++) {
+      output.push(1 + Math.floor(Math.random() * this.numSides));
+    }
+    return output;
+  }
+}
+
 var root = {
-    hello: () => {
-	return 'Hello !';
-    },
-    quote: () => {
-	return Math.random() > 0.5 ? "It is what it is" : "Shit happens";
-    },
-    random: () => {
-	return Math.random();
-    },
-    rollDices: function ({numDices, numSides}) {
-	var output = [];
-	for (var i = 0; i < numDices; i++) {
-	    output.push(1 + Math.floor(Math.random() * (numSides || 6)));
-	}
-	return output;
-    },
+  getDice: function({numSides}) {
+    return new Dice(numSides || 6);
+  }
 };
 
 var app = express();
 app.use('/graphql', graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql:true,
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
 }));
 
 app.listen(port);
