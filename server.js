@@ -5,34 +5,57 @@ var {
 } = require('graphql');
 
 var port = process.env.PORT || 8080;
+var fakeDataBase = {};
 
 var schema = buildSchema(`
-  type Dice {
-    numSides: Int!
-    rollOnce: Int!
-    roll(numRolls: Int!) : [Int]
+  input UserInput {
+    name: String!
+    email: String!
+  }
+
+  type Mutation {
+    createUser(input: UserInput): User
+    updateUser(id: ID!, input: UserInput) : User
+  }
+
+  type User {
+    id: ID!
+    name: String!
+    email: String!
   }
 
   type Query {
-    getDice(numSides: Int): Dice
+    getUser(id: !ID): User
   }
 `);
 
-class Dice {
-  constructor(numSides) {
-    this.numSides = numSides;
+class User {
+  constructor(id, {name, email}) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
   }
 
-  rollOnce() {
-    return 1 + Math.floor(Math.random() * this.numSides);
+  createUser({input}) {
+    var id = require('crypto').randomBytes(10).toString('hex');
+    fakeDatabase[id] = input;
+
+    return new User(id, input);
   }
 
-  roll({numRolls}) {
-    var output = [];
-    for (var i = 0; i < numRolls; i++) {
-      output.push(1 + Math.floor(Math.random() * this.numSides));
+  updateUser({id, input}) {
+    if (!fakeDataBase[id]) {
+      throw new Error('No user exists with id ' + id);
     }
-    return output;
+    fakeDatabase[id] = input;
+    return new User(id, input);
+  }
+
+  getUser({id}) {
+    if (!fakeDataBase[id]) {
+      throw new Error('No user exists with id ' + id);
+    }
+    return new User(id, fakeDataBase[id]);
   }
 }
 
