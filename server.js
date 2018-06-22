@@ -9,23 +9,23 @@ var fakeDataBase = {};
 
 var schema = buildSchema(`
   input UserInput {
-    name: String!
-    email: String!
-  }
-
-  type Mutation {
-    createUser(input: UserInput): User
-    updateUser(id: ID!, input: UserInput) : User
+    name: String
+    email: String
   }
 
   type User {
     id: ID!
-    name: String!
-    email: String!
+    name: String
+    email: String
   }
 
   type Query {
-    getUser(id: !ID): User
+    getUser(id: ID!): User
+  }
+
+  type Mutation {
+    createUser(input: UserInput): User
+    updateUser(id: ID!, input: UserInput): User
   }
 `);
 
