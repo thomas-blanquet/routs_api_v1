@@ -20,12 +20,12 @@ var schema = buildSchema(`
   }
 
   type Query {
-    getUser(id: ID!): User
+    getUser(id: ID!): User!
   }
 
   type Mutation {
-    createUser(input: UserInput): User
-    updateUser(id: ID!, input: UserInput): User
+    createUser(input: UserInput): User!
+    updateUser(id: ID!, input: UserInput): User!
   }
 `);
 
