@@ -9,7 +9,7 @@ var schema = buildSchema(`
     hello: String
     quote: String
     random: Float!
-    rollTreeDices: [Int]
+    rollDices(numDices: Int!, numSides: Int): [Int]
   }
 `);
 
@@ -23,8 +23,12 @@ var root = {
     random: () => {
 	return Math.random();
     },
-    rollThreeDices: () => {
-	return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
+    rollDices: function ({numDices, numSides}) => {
+	var output = [];
+	for (var i = 0; i < numDice; i++) {
+	    output.push(1 + Math.floor(Math.random() * (numSides || 6)));
+	}
+	return output;
     },
 };
 
