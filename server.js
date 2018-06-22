@@ -40,7 +40,7 @@ class User {
 var root = {
   createUser({input}) {
     var id = require('crypto').randomBytes(10).toString('hex');
-    fakeDatabase[id] = input;
+    fakeDataBase[id] = input;
 
     return new User(id, input);
   },
@@ -49,7 +49,7 @@ var root = {
     if (!fakeDataBase[id]) {
       throw new Error('No user exists with id ' + id);
     }
-    fakeDatabase[id] = input;
+    fakeDataBase[id] = input;
     return new User(id, input);
   },
 
