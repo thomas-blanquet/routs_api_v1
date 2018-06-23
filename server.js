@@ -1,72 +1,39 @@
-var express = require('express');
-var graphqlHTTP = require('express-graphql');
-var {
-  buildSchema
-} = require('graphql');
+const express = require('express');
+const bodyParser = require('body-parser');
+const graphqlHTTP = require('express-graphql');
+const schema = require('./src/data/schema');
+const jwt = require('express-jwt');
+var cors = require('cors');
 
-var port = process.env.PORT || 8080;
-var fakeDataBase = {};
+require('dotenv').config();
 
-var schema = buildSchema(`
-  input UserInput {
-    name: String
-    email: String
-  }
+// create our express app
+const app = express();
 
-  type User {
-    id: ID!
-    name: String
-    email: String
-  }
+const PORT = process.env.PORT || 8080;
 
-  type Query {
-    getUser(id: ID!): User
-  }
+// auth middleware
+const auth = jwt({
+  secret: process.env.JWT_SECRET,
+  credentialsRequired: false
+});
 
-  type Mutation {
-    createUser(input: UserInput): User
-    updateUser(id: ID!, input: UserInput): User
-  }
-`);
+app.use(cors());
 
-class User {
-  constructor(id, {name, email}) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-  }
-}
-
-var root = {
-  createUser({input}) {
-    var id = require('crypto').randomBytes(10).toString('hex');
-    fakeDataBase[id] = input;
-
-    return new User(id, input);
-  },
-
-  updateUser({id, input}) {
-    if (!fakeDataBase[id]) {
-      throw new Error('No user exists with id ' + id);
+// graphql endpoint
+app.use(
+  '/api',
+  bodyParser.json(),
+  auth,
+  graphqlHTTP(req => ({
+    schema,
+    graphiql: true,
+    context: {
+      user: req.user
     }
-    fakeDataBase[id] = input;
-    return new User(id, input);
-  },
+  }))
+);
 
-  getUser({id}) {
-    if (!fakeDataBase[id]) {
-      throw new Error('No user exists with id ' + id);
-    }
-    return new User(id, fakeDataBase[id]);
-  },
-};
-
-var app = express();
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: root,
-  graphiql: true,
-}));
-
-app.listen(port);
-console.log('Running a GraphQL API server at ' + port);
+app.listen(PORT, () => {
+  console.log(`The server is running on {url}:${PORT}/api`)
+});
