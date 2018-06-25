@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const graphqlHTTP = require('express-graphql');
 const schema = require('./src/data/schema');
 const jwt = require('express-jwt');
-const Sequelize = require('sequelize');
+const mongoose = require('mongoose');
 var cors = require('cors');
 
 require('dotenv').config();
@@ -35,16 +35,8 @@ app.use(
   }))
 );
 
-const sequelize = new Sequelize(process.env.DATABASE_URL);
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.DB_URL);
 
 app.listen(PORT, () => {
   console.log(`The server is running on {url}:${PORT}/api`)

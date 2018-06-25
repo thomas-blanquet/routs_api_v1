@@ -42,5 +42,3 @@ class User {
       _users[id].email, _users[id].password);
   }
 }
-
-module.exports = User;
