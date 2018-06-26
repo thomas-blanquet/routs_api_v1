@@ -20,8 +20,6 @@
     "graphql-tools": "^3.0.2",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.6",
-    "pg": "^7.4.3",
-    "sequelize": "^4.38.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.5",

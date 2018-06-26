@@ -3,14 +3,21 @@ const Schema = mongoose.Schema
 mongoose.Promise = global.Promise;
 
 const UserSchema = new Schema({
-    username: {
-      type:String
+    nirstname: {
+      type:String,
+      default:""
+    },
+    lastname: {
+      type:String,
+      default:""
     },
     email: {
-      type:String
+      type:String,
+      required:true
     },
     password: {
-      type:String
+      type:String,
+      required:true
     },
 });
 
