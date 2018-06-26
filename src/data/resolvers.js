@@ -20,7 +20,7 @@ const resolvers = {
 
   Mutation: {
     // Handle user signup
-    async signup(_, { email, password }) {
+    async signup(_, { username, email, password }) {
       const userExist = await User.findByEmail(email);
 
       if (userExist) {
@@ -28,7 +28,8 @@ const resolvers = {
       }
 
       const user = new User({
-        email: email,
+        username,
+        email,
         password: await bcrypt.hash(password, 10)
       })
       const newUser = user.save();
