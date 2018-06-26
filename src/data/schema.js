@@ -5,8 +5,7 @@ const resolvers = require('./resolvers')
 const typeDefs = `
       type User {
         id: String!
-        firstname: String!
-        lastname: String!
+        username: String!
         email: String!
       }
 
@@ -15,7 +14,7 @@ const typeDefs = `
       }
 
       type Mutation {
-        signup (email: String!, password: String!): String
+        signup (username: String!, email: String!, password: String!): String
         login (email: String!, password: String!): String
       }
     `
