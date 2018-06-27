@@ -1,4 +1,5 @@
 const User = require('../models/user_mongoose')
+const { Simulation } = require('../models/simulation')
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
 require('dotenv').config()
@@ -9,13 +10,23 @@ const resolvers = {
     async me(_, args, { user }) {
       // make sure user is logged in
       if (!user) {
-        throw new Error('You are not authenticated!')
+        throw new Error('You are not authenticated!');
       }
 
-      var test = await User.findById(user.id)
+      var test = await User.findById(user.id);
       console.log(test);
       return test;
-    }
+    },
+
+    async simulations(_, args, { user }) {
+      if (!user) {
+        throw new Error('You are not authenticated!');
+      }
+
+      var simulations = await User.findById(user.id).simulations;
+      console.log(simulations);
+      return simulations;
+    },
   },
 
   Mutation: {
@@ -68,7 +79,24 @@ const resolvers = {
           expiresIn: '1d'
         }
       )
-    }
+    },
+
+    async create_simulation(_, { duration }, { user }) {
+      if (!user) {
+        throw new Error('You are not authenticated!');
+      }
+
+      const simulation = new Simulation({
+        duration,
+      });
+
+      var owner = await User.findById(user.id);
+      owner.simulations.push(simulation);
+      owner.save();
+      console.log(simulation);
+
+      return simulation;
+    },
   }
 }
 
