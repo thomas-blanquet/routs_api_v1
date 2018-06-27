@@ -14,7 +14,10 @@ const resolvers = {
       }
 
       var test = await User.findById(user.id);
-      console.log(test);
+      if (!test) {
+        throw new Error('Error occured with your account, retry or report to support service');
+      }
+      
       return test;
     },
 
