@@ -17,7 +17,7 @@ const resolvers = {
       if (!test) {
         throw new Error('Error occured with your account, retry or report to support service');
       }
-      
+
       return test;
     },
 
@@ -27,7 +27,9 @@ const resolvers = {
       }
 
       try {
-        var simulations = await User.findById(user.id).simulations;
+        var user_db = await User.findById(user.id);
+        console.log(user_db);
+        var simulations = user_db.simulations;
       } catch (_) {
         throw new Error('Error occured with your account, retry or report to support service');
       }
