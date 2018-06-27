@@ -23,8 +23,11 @@ const resolvers = {
         throw new Error('You are not authenticated!');
       }
 
-      var simulations = await User.findById(user.id).simulations;
-      console.log(simulations);
+      try() {
+        var simulations = await User.findById(user.id).simulations;
+      } catch (_) {
+        throw new Error('Error occured with your account, retry or report to support service');
+      }
       return simulations;
     },
   },
@@ -91,10 +94,13 @@ const resolvers = {
       });
 
       var owner = await User.findById(user.id);
-      owner.simulations.push(simulation);
-      owner.save();
-      console.log(simulation);
 
+      try() {
+        owner.simulations.push(simulation);
+        owner.save();
+      } catch(_) {
+        throw new Error('Error occured with your account, retry or report to support service');
+      }
       return simulation;
     },
   }
