@@ -3,21 +3,17 @@ const resolvers = require('./resolvers');
 const User = require('./user/schema');
 const Simulation = require('./simulation/schema');
 
-// Define our schema using the GraphQL schema language
-const Query =
-`type Query {
-  me: User
-  simulations: [Simulation]!
+const Query = `
+type Query {
+  _empty: String
 }`;
 
 const Mutation =
 `type Mutation {
-  signup (username: String!, email: String!, password: String!): String
-  login (email: String!, password: String!): String
-  create_simulation (duration: Float!): Simulation!
+  _empty: String
 }`;
 
 module.exports = makeExecutableSchema({
-  typeDefs: [User, Simulation, Query, Mutation],
+  typeDefs: [Query, Mutation, User, Simulation],
   resolvers: resolvers
 })
