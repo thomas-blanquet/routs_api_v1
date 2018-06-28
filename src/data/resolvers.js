@@ -28,7 +28,6 @@ const resolvers = {
 
       try {
         var user_db = await User.findById(user.id);
-        console.log(user_db);
         var simulations = user_db.simulations;
       } catch (_) {
         throw new Error('Error occured with your account, retry or report to support service');
