@@ -5,7 +5,7 @@ extend type Query {
 
 extend type Mutation {
   create_result (simulation_id: String!): Result!
-  set_duration(simulation_id: String!, result_id: String!, duration: Float!): Simulation!
+  set_duration(simulation_id: String!, result_id: String!, duration: Float!): Result!
 }
 
 type Result {
