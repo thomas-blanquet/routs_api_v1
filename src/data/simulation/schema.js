@@ -4,12 +4,14 @@ extend type Query {
 }
 
 extend type Mutation {
-  create_simulation (duration: Float!): Simulation!
+  create_simulation: Simulation!
+  set_parameters(id: String!, parameters: String!): Simulation!
 }
 
 type Simulation {
   id: String!
-  duration: Float
+  parameters: String
+  results: [Result]!
 }`
 
 module.exports = Simulation;

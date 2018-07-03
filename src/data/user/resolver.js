@@ -1,4 +1,5 @@
 const User = require('../../models/user')
+const Messages = require('../../messages');
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
 require('dotenv').config()
@@ -9,12 +10,12 @@ const resolvers = {
     async me(_, args, { user }) {
       // make sure user is logged in
       if (!user) {
-        throw new Error('You are not authenticated!');
+        throw new Error(Messages.not_authorized);
       }
 
       var test = await User.findById(user.id);
       if (!test) {
-        throw new Error('Error occured with your account, retry or report to support service');
+        throw new Error(Messages.account_problem);
       }
 
       return test;
@@ -27,7 +28,7 @@ const resolvers = {
       const userExist = await User.findByEmail(email);
 
       if (userExist) {
-          throw new Error('User with that email already exists');
+        throw new Error(Messages.already_exists);
       }
 
       const user = new User({
@@ -52,13 +53,13 @@ const resolvers = {
       const user = await User.findByEmail(email);
 
       if (!user) {
-        throw new Error('No user with that email');
+        throw new Error(Messages.no_user_email);
       }
 
       const valid = await bcrypt.compare(password, user.password);
 
       if (!valid) {
-        throw new Error('Incorrect password');
+        throw new Error(Messages.incorrect_password);
       }
 
       // return json web token
