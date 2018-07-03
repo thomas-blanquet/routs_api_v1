@@ -8,4 +8,6 @@ module.exports = {
 
   no_simulation_id: 'No simulation with this id found',
   simulation_already_ran: 'Simulation has been ran, you can relaunched it or create a new one to have new parameters',
+
+  no_result_id: 'No result with this id found',
 }
